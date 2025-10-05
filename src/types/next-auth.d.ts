@@ -21,9 +21,9 @@ declare module "next-auth" {
         profilePic: string;
         verified:boolean;
         createdAt: Date;
-        otp:string;
-        password: string | null;
-        vault: VaultEntry[]
+        otp:number;
+        // vault: VaultEntry[]
+        password: string;
     }
 
 }

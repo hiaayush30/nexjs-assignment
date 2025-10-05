@@ -28,7 +28,6 @@ export const authOptions: AuthOptions = {
                     if (!bcrypt.compareSync(credentials.password, user.password)) {
                         throw new Error("Email or Password incorrect!")
                     }
-                    // Any object returned will be saved in `user` property of the JWT
                     return user
                 } else {
                     // If you return null then an error will be displayed advising the user to check their details.
@@ -73,7 +72,7 @@ export const authOptions: AuthOptions = {
     },
     pages: {
         error: '/login',
-        signIn:"/login"
+        signIn: "/login"
     },
     secret: process.env.NEXTAUTH_SECRET
 }
