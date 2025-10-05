@@ -5,6 +5,7 @@ import "./globals.css";
 //@ts-expect-error ignore
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
+import { ThemeProvider } from "./theme-provider";
 
 
 const geistSans = Geist({
@@ -32,9 +33,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Theme>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          >
           {children}
-        </Theme>
+        </ThemeProvider>
       </body>
     </html>
   );

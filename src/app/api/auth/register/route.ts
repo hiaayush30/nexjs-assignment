@@ -1,3 +1,4 @@
+import { sendEmail } from "@/lib/mailer";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,6 +16,11 @@ const generateOtp = ()=>{
         otp += Math.floor(Math.random()*10)
     }
     return otp
+}
+
+export async function SendOtp(email:string,otp:number) {
+  await sendEmail(email, "Your OTP Code", `<h1>${otp}</h1>`);
+  return NextResponse.json({ success: true });
 }
 
 export const POST = async (req: NextRequest) => {
@@ -39,10 +45,12 @@ export const POST = async (req: NextRequest) => {
             }, { status: 403 })
         }
         const hashedPassword = await bcrypt.hash(password, 5);
+        const otp = generateOtp();
+        SendOtp(email,otp);
         await prisma.user.create({
             data: {
                 email,
-                otp:generateOtp(),
+                otp,
                 username:email.split("@")[0],
                 password: hashedPassword,
                 profilePic: `https://avatar.iran.liara.run/username?username=${email.split("@")[0]}`
