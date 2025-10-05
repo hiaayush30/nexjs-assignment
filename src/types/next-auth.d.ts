@@ -1,4 +1,4 @@
-import { Gender, VaultEntry } from "@prisma/client";
+import { VaultEntry } from "@prisma/client";
 import "next-auth";
 import { DefaultSession } from "next-auth";
 declare module "next-auth" {
@@ -11,6 +11,7 @@ declare module "next-auth" {
             createdAt: Date;
             verified:boolean;
             vault: VaultEntry[];
+            otp:string;
         } & DefaultSession['user']
     }
     interface User {
@@ -20,6 +21,7 @@ declare module "next-auth" {
         profilePic: string;
         verified:boolean;
         createdAt: Date;
+        otp:string;
         password: string | null;
         vault: VaultEntry[]
     }

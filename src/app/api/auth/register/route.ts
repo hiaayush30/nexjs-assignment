@@ -4,10 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const NewUserSchema = z.object({
-    name: z.string().min(3, { message: "Minimum 33 characters required" }),
     email: z.email(),
     password: z.string().min(3, { message: "Minimum 3 characters required" })
 })
+
+const generateOtp = ()=>{
+    let otp = 0;
+    for(let i = 0;i<6;i++){
+        otp = otp*10;
+        otp += Math.floor(Math.random()*10)
+    }
+    return otp
+}
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -19,7 +27,7 @@ export const POST = async (req: NextRequest) => {
                 error: "Invalid Request"
             }, { status: 400 })
         }
-        const { email, name, password } = parsedData.data;
+        const { email, password } = parsedData.data;
         const existingUser = await prisma.user.findFirst({
             where: {
                 email
@@ -34,9 +42,10 @@ export const POST = async (req: NextRequest) => {
         await prisma.user.create({
             data: {
                 email,
+                otp:generateOtp(),
                 username:email.split("@")[0],
                 password: hashedPassword,
-                profilePic: `https://avatar.iran.liara.run/username?username=${name}`
+                profilePic: `https://avatar.iran.liara.run/username?username=${email.split("@")[0]}`
             }
         })
         return NextResponse.json({

@@ -1,5 +1,4 @@
 import { AuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs"
 import { prisma } from "../../../../lib/prisma"

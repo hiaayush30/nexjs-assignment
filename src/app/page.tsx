@@ -1,117 +1,107 @@
 "use client";
-import { DoubleArrowDownIcon } from "@radix-ui/react-icons";
+
 import { motion, Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useRef } from "react";
+import React from "react";
 
-// Animation Variants
-const sectionVariants: Variants = {
-  hidden: { opacity: 0, y: 50 },
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: [0.0, 0.0, 0.58, 1.0] as const },
-  },
-};
-
-const imagePlaceholderVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: "easeInOut" },
+    transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1.0] },
   },
 };
 
 export default function Home() {
-  const divRef = useRef<null | HTMLDivElement>(null);
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white font-sans overflow-hidden">
+    <div className="min-h-screen bg-black text-gray-100 font-sans overflow-hidden">
       {/* Navbar */}
       <motion.nav
-        className="fixed top-0 left-0 w-full z-50 p-4 bg-gray-800 bg-opacity-90 shadow-lg"
+        className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-gray-900/80 border-b border-gray-800 shadow-md"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
       >
-        <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
-          <motion.h1
-            className="text-4xl cursor-pointer font-extrabold text-blue-400 tracking-tight"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        <div className="max-w-6xl mx-auto flex justify-between items-center px-5 py-4">
+          <Link
+            href="/"
+            className="text-2xl sm:text-3xl font-bold text-white hover:text-gray-300 transition-colors duration-300"
           >
-            Password-Manager
-          </motion.h1>
-          <div className="hidden md:flex space-x-8">
+            Password<span className="text-gray-400">Manager</span>
+          </Link>
+
+          <div className="hidden md:flex space-x-6">
             <Link
               href="/login"
-              className="text-gray-300 hover:text-blue-400 transition-colors duration-300 text-lg"
+              className="text-gray-300 hover:text-white transition-colors duration-300"
             >
-              Signup/Login
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="text-gray-300 hover:text-white transition-colors duration-300"
+            >
+              Sign Up
             </Link>
           </div>
-          <button className="md:hidden text-white focus:outline-none">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              ></path>
-            </svg>
-          </button>
         </div>
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 pt-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col md:flex-row items-center justify-center gap-12">
-          {/* Hero Text */}
+      <section className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-950 pt-20">
+        <div className="max-w-7xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center justify-between gap-16">
+          {/* Text Section */}
           <motion.div
-            className="text-center md:text-left md:w-1/2 order-last md:order-first"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-          >
-            <motion.h2 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-              Secure Your Digital Life with Password-Manager
-            </motion.h2>
-            <motion.p className="text-xl sm:text-2xl md:text-3xl text-gray-300 mb-10 max-w-4xl mx-auto md:mx-0">
-              Generate, store, and manage strong passwords with complete privacy.
-            </motion.p>
-
-            <div className="flex items-center max-md:justify-center">
-              <motion.button
-                className="px-10 py-4 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold text-xl rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105"
-                onClick={() => router.push("/login")}
-              >
-                Get Started
-              </motion.button>
-            </div>
-          </motion.div>
-
-          {/* Hero Image */}
-          <motion.div
-            className="relative w-full overflow-hidden md:w-1/2 h-80 sm:h-96 rounded-xl shadow-lg flex items-center justify-center"
-            variants={imagePlaceholderVariants}
+            className="text-center md:text-left md:w-1/2"
+            variants={fadeUp}
             initial="hidden"
             animate="visible"
-            transition={{ delay: 1 }}
           >
-            <Image src="/PasswordHero.jpg" alt="Password Manager" fill className="object-cover" />
+            <h1 className="text-5xl sm:text-6xl md:text-6xl font-extrabold leading-tight mb-8 text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400">
+              Secure Your <br /> Digital Life
+            </h1>
+
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-10 max-w-xl mx-auto md:mx-0">
+              Store, generate, and manage strong passwords — encrypted, private,
+              and always in your control.
+            </p>
+
+            <motion.button
+              onClick={() => router.push("/login")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-10 py-4 bg-gray-100 text-black font-semibold text-lg rounded-full shadow-md transition-all duration-300 hover:bg-gray-300"
+            >
+              Get Started
+            </motion.button>
+          </motion.div>
+
+          {/* Image Section */}
+          <motion.div
+            className="relative w-full md:w-1/2 h-72 sm:h-96 rounded-2xl overflow-hidden shadow-2xl border border-gray-800"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
+          >
+            <Image
+              src="/landing.jpg"
+              alt="Password Manager Illustration"
+              fill
+              className="object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+            />
           </motion.div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
+        © {new Date().getFullYear()} PasswordManager — All Rights Reserved
+      </footer>
     </div>
   );
 }

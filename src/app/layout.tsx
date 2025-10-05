@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+//@ts-expect-error ignore
 import "./globals.css";
+//@ts-expect-error ignore
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 
