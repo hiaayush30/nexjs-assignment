@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 5, "column": 0}, "map": {"version":3,"sources":["file:///home/pandemicpanda30/Desktop/nexjs-assignment/src/app/%28auth%29/layout.tsx"],"sourcesContent":["import Link from 'next/link'\nimport React, { ReactNode } from 'react'\n\nfunction layout({children}:{children:ReactNode}) {\n  return (\n    <div>\n      <nav\n        className=\"fixed top-0 left-0 w-full z-50 p-4 bg-stone-900 bg-opacity-90 shadow-lg\"\n      >\n        <div className=\"container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8\">\n          <Link href={\"/\"}\n            className=\"text-4xl cursor-pointer font-extrabold text-stone-200 tracking-tight\"\n          >\n            Password-Manager\n          </Link>\n        </div>\n      </nav>\n      {children}\n    </div>\n  )\n}\n\nexport default layout\n"],"names":[],"mappings":";;;;AAAA;;;AAGA,SAAS,OAAO,EAAC,QAAQ,EAAsB;IAC7C,qBACE,8OAAC;;0BACC,8OAAC;gBACC,WAAU;0BAEV,cAAA,8OAAC;oBAAI,WAAU;8BACb,cAAA,8OAAC,4JAAA,CAAA,UAAI;wBAAC,MAAM;wBACV,WAAU;kCACX;;;;;;;;;;;;;;;;YAKJ;;;;;;;AAGP;uCAEe","debugId":null}}]
-}

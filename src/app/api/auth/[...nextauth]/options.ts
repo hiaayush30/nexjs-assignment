@@ -42,7 +42,7 @@ export const authOptions: AuthOptions = {
         maxAge: 20 * 24 * 60 * 60 //30 days
     },
     callbacks: {
-        async jwt({ token, user, profile }) {
+        async jwt({ token, user }) {
             // The user object is only available when the user logs in. On subsequent requests, the token is used
             if (user) {
                 token.id = user.id;
@@ -50,6 +50,8 @@ export const authOptions: AuthOptions = {
                 token.email = user.email;
                 token.profilePic = user.profilePic;
                 token.createdAt = user.createdAt;
+                token.otp = user.otp;
+                token.verified = user.verified;
             }
             return token
         },
@@ -66,6 +68,8 @@ export const authOptions: AuthOptions = {
                 session.user.email = data.email;
                 session.user.createdAt = data.createdAt;
                 session.user.profilePic = data.profilePic;
+                session.user.otp = data.otp;
+                session.user.verified = data.verified;
             }
             return session
         }

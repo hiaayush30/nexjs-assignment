@@ -11,7 +11,8 @@ declare module "next-auth" {
             createdAt: Date;
             verified:boolean;
             vault: VaultEntry[];
-            otp:string;
+            otp:number;
+            password:string;
         } & DefaultSession['user']
     }
     interface User {

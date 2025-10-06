@@ -1,18 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { Moon, Sun, KeyRound, Shield, MailCheck } from "lucide-react"
+import { Moon, Sun, KeyRound, Shield, MailCheck, LogOutIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import PasswordGenerator from "@/components/generator"
 import VerifyEmail from "@/components/verify-email"
 import Vault from "@/components/vault"
 import { useTheme } from "next-themes"
-import { useSession } from "next-auth/react"
+import { signOut } from "next-auth/react"
 
 export default function DashboardPage() {
   const { setTheme, theme } = useTheme();
-  const { data } = useSession();
   const [activeTab, setActiveTab] = useState("generate")
 
   return (
@@ -55,7 +54,14 @@ export default function DashboardPage() {
           </Button>
         </nav>
 
-        <div className="mt-auto pt-8">
+        <div className="mt-auto pt-8 flex flex-col gap-2">
+          <Button
+            variant="outline"
+            className="w-full cursor-pointer"
+            onClick={() => signOut()}
+          >
+            <LogOutIcon /> Logout
+          </Button>
           <Button
             variant="outline"
             className="w-full cursor-pointer"
@@ -83,7 +89,7 @@ export default function DashboardPage() {
           <Vault />
         )}
 
-        {(activeTab === "verify" && !data?.user.verified) && (
+        {(activeTab === "verify") && (
           <VerifyEmail />
         )}
       </main>
