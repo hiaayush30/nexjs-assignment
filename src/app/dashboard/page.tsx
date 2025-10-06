@@ -3,18 +3,21 @@
 import { useState } from "react"
 import { Moon, Sun, KeyRound, Shield, MailCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import PasswordGenerator from "@/components/generator"
-import { ModeToggle } from "@/components/theme-toggle"
+import VerifyEmail from "@/components/verify-email"
+import Vault from "@/components/vault"
+import { useTheme } from "next-themes"
+import { useSession } from "next-auth/react"
 
 export default function DashboardPage() {
-  const [darkMode, setDarkMode] = useState(true)
+  const { setTheme, theme } = useTheme();
+  const { data } = useSession();
   const [activeTab, setActiveTab] = useState("generate")
 
   return (
     <div
-      className={"min-h-screen flex transition-colors duration-300 bg-white text-foreground" }
+      className={"min-h-screen max-h-screen flex transition-colors duration-300 bg-white text-foreground"}
     >
       {/* Sidebar */}
       <aside
@@ -50,24 +53,15 @@ export default function DashboardPage() {
           >
             <MailCheck className="mr-2 h-4 w-4" /> Verify Mail
           </Button>
-          <ModeToggle/>
         </nav>
 
         <div className="mt-auto pt-8">
           <Button
             variant="outline"
-            className="w-full"
-            onClick={() => setDarkMode(!darkMode)}
+            className="w-full cursor-pointer"
+            onClick={() => setTheme(theme == "dark" ? "light" : "dark")}
           >
-            {darkMode ? (
-              <>
-                <Sun className="mr-2 h-4 w-4" /> Light Mode
-              </>
-            ) : (
-              <>
-                <Moon className="mr-2 h-4 w-4" /> Dark Mode
-              </>
-            )}
+            {theme == "light" ? <><Moon /> Dark Mode</> : <> <Sun />Light Mode</>}
           </Button>
         </div>
       </aside>
@@ -76,7 +70,7 @@ export default function DashboardPage() {
       <main
         className={cn(
           "flex-1 p-8 overflow-y-auto transition-colors duration-300",
-          darkMode ? "bg-background" : "bg-gray-50"
+          "dark:bg-background", "bg-gray-50"
         )}
       >
         {activeTab === "generate" && (
@@ -86,37 +80,11 @@ export default function DashboardPage() {
         )}
 
         {activeTab === "vault" && (
-          <Card
-            className={cn(
-              "max-w-2xl mx-auto mt-8 transition-colors duration-300",
-              "dark:bg-gray-900 dark:text-gray-100","bg-gray-100 text-gray-800"
-            )}
-          >
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Your Vault</h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                Securely stored passwords will appear here.
-              </p>
-              <p>No saved passwords yet.</p>
-            </CardContent>
-          </Card>
+          <Vault />
         )}
 
-        {activeTab === "verify" && (
-          <Card
-            className={cn(
-              "max-w-2xl mx-auto mt-8 transition-colors duration-300",
-              "dark:bg-gray-900 dar:ktext-gray-100" , "bg-gray-100 text-gray-800"
-            )}
-          >
-            <CardContent className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold">Verify Your Email</h2>
-              <p className="text-sm text-muted-foreground">
-                Verify your email address to enable password recovery and sync.
-              </p>
-              <Button>Send Verification Mail</Button>
-            </CardContent>
-          </Card>
+        {(activeTab === "verify" && !data?.user.verified) && (
+          <VerifyEmail />
         )}
       </main>
     </div>

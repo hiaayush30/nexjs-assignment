@@ -2,7 +2,7 @@
     script: typeof document === "object" ? document.currentScript : undefined,
     chunks: [
   "static/chunks/[root-of-the-server]__287b4f37._.css",
-  "static/chunks/_8c1871bf._.js"
+  "static/chunks/_23317b53._.js"
 ],
     source: "dynamic"
 });
