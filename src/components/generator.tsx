@@ -9,6 +9,28 @@ import { Textarea } from "@/components/ui/textarea"
 import { useSession } from "next-auth/react"
 import { addToVault } from "@/actions/add-to-vault"
 
+async function getKey() {
+  const secret = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || "default_secret"
+  const enc = new TextEncoder().encode(secret)
+
+  // SHA-256 hash to get exactly 32 bytes
+  const hash = await crypto.subtle.digest("SHA-256", enc)
+  return crypto.subtle.importKey("raw", hash, { name: "AES-GCM" }, false, ["encrypt", "decrypt"])
+}
+
+
+async function encryptData(data: string) {
+  const key = await getKey()
+  const iv = crypto.getRandomValues(new Uint8Array(12)) // random initialization vector
+  const encoded = new TextEncoder().encode(data)
+  const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, encoded)
+
+  // Return Base64 encoded string for storage
+  const ivString = btoa(String.fromCharCode(...iv))
+  const cipherText = btoa(String.fromCharCode(...new Uint8Array(encrypted)))
+  return `${ivString}:${cipherText}`
+}
+
 export default function PasswordGenerator() {
   const { data } = useSession()
   const [length, setLength] = useState(16)
@@ -59,24 +81,27 @@ export default function PasswordGenerator() {
     if (!title || !password)
       return alert("Please fill at least a title and generate a password.")
 
-    console.log({
-      title,
-      url,
-      password,
-      notes,
+    // 🔐 Encrypt all sensitive data before sending to backend
+    const encryptedTitle = await encryptData(title)
+    const encryptedUrl = await encryptData(url)
+    const encryptedPassword = await encryptData(password)
+    const encryptedNotes = await encryptData(notes)
+
+    const res = await addToVault(data?.user.id as string, {
+      title: encryptedTitle,
+      url: encryptedUrl,
+      password: encryptedPassword,
+      notes: encryptedNotes,
     })
 
-    const res = await addToVault(data?.user.id as string, { title, url, password, notes })
-
     if (res) {
-      alert("Password added to vault!")
+      alert("Password added to vault securely! 🔒")
       setTitle("")
       setUrl("")
       setNotes("")
       setPassword("")
-    }
-    else{
-      alert("Error in adding to vault!")
+    } else {
+      alert("Error adding to vault!")
     }
   }
 
@@ -89,7 +114,6 @@ export default function PasswordGenerator() {
         </p>
 
         <div className="space-y-6">
-          {/* Vault Entry Fields */}
           <div className="space-y-3">
             <div>
               <Label className="pb-2" htmlFor="title">Title</Label>
@@ -117,7 +141,6 @@ export default function PasswordGenerator() {
 
           <Separator />
 
-          {/* Password Options */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="length">Password Length</Label>
@@ -166,7 +189,6 @@ export default function PasswordGenerator() {
 
           <Separator />
 
-          {/* Generated password + buttons */}
           <div className="flex flex-col sm:flex-row gap-3">
             <Input
               readOnly
@@ -175,21 +197,17 @@ export default function PasswordGenerator() {
               className="bg-input text-foreground"
             />
             <div className="flex gap-2">
-              <Button className="cursor-pointer" onClick={generate} variant="default">
-                Generate
-              </Button>
+              <Button onClick={generate}>Generate</Button>
               <Button
                 onClick={copy}
                 variant={copied ? "secondary" : "outline"}
                 disabled={!password || copied}
-                className={copied ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}
               >
                 {copied ? "Copied!" : "Copy"}
               </Button>
             </div>
           </div>
 
-          {/* Notes Field */}
           <div>
             <Label className="pb-3" htmlFor="notes">Notes</Label>
             <Textarea
@@ -201,9 +219,11 @@ export default function PasswordGenerator() {
             />
           </div>
 
-          {/* Save Button */}
           <div className="flex justify-center">
-            <Button onClick={handleSave} className="cursor-pointer bg-stone-700 hover:bg-stone-600 text-stone-50 dark:bg-stone-200 dark:hover:bg-stone-300 dark:text-stone-900">
+            <Button
+              onClick={handleSave}
+              className="cursor-pointer bg-stone-700 hover:bg-stone-600 text-stone-50 dark:bg-stone-200 dark:hover:bg-stone-300 dark:text-stone-900"
+            >
               Save Entry
             </Button>
           </div>

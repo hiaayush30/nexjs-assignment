@@ -3,6 +3,7 @@ import { SendOtp } from "@/actions/send-otp";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { randomBytes } from "crypto";
 
 const NewUserSchema = z.object({
   email: z.string().email(),
@@ -41,6 +42,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     const hashedPassword = await bcrypt.hash(password, 10);
     const otp = generateOtp();
 
+    const customSalt = randomBytes(16).toString("hex")
+
     // Send OTP mail (don’t await if you want faster response)
     await SendOtp(email, otp);
 
@@ -52,6 +55,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         username: email.split("@")[0],
         password: hashedPassword,
         profilePic: `https://avatar.iran.liara.run/username?username=${email.split("@")[0]}`,
+        customSalt
       },
     });
 

@@ -19,6 +19,32 @@ type VaultEntry = {
   createdAt: string
 }
 
+// 🔑 Same key helper used in encryption
+async function getKey() {
+  const secret = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || "default_secret"
+  const enc = new TextEncoder().encode(secret)
+
+  // SHA-256 hash to get exactly 32 bytes
+  const hash = await crypto.subtle.digest("SHA-256", enc)
+  return crypto.subtle.importKey("raw", hash, { name: "AES-GCM" }, false, ["encrypt", "decrypt"])
+}
+
+// 🔓 Decrypt Base64 string (iv:cipherText)
+async function decryptData(encrypted: string) {
+  if (!encrypted) return ""
+  try {
+    const [ivBase64, cipherBase64] = encrypted.split(":")
+    const iv = Uint8Array.from(atob(ivBase64), c => c.charCodeAt(0))
+    const cipher = Uint8Array.from(atob(cipherBase64), c => c.charCodeAt(0))
+    const key = await getKey()
+    const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipher)
+    return new TextDecoder().decode(decrypted)
+  } catch (err) {
+    console.error("Decryption failed:", err)
+    return "[Decryption error]"
+  }
+}
+
 export default function Vault() {
   const { data: session, status } = useSession()
   const [vaultEntries, setVaultEntries] = useState<VaultEntry[]>([])
@@ -32,7 +58,19 @@ export default function Vault() {
   const fetchVault = async () => {
     try {
       const res = await axios.get(`/api/vault?userId=${session?.user?.id}`)
-      setVaultEntries(res.data)
+
+      // 🔓 Decrypt all entries
+      const decryptedEntries = await Promise.all(
+        res.data.map(async (entry: VaultEntry) => ({
+          ...entry,
+          title: await decryptData(entry.title),
+          password: await decryptData(entry.password),
+          URL: entry.URL ? await decryptData(entry.URL) : "",
+          notes: entry.notes ? await decryptData(entry.notes) : "",
+        }))
+      )
+
+      setVaultEntries(decryptedEntries)
     } catch (error) {
       console.error('Error fetching vault:', error)
     } finally {

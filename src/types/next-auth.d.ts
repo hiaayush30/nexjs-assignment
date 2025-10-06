@@ -9,10 +9,11 @@ declare module "next-auth" {
             id: string;
             profilePic: string;
             createdAt: Date;
-            verified:boolean;
+            verified: boolean;
             vault: VaultEntry[];
-            otp:number;
-            password:string;
+            otp: number;
+            password: string;
+            customSalt: string
         } & DefaultSession['user']
     }
     interface User {
@@ -20,9 +21,10 @@ declare module "next-auth" {
         username: string;
         id: string;
         profilePic: string;
-        verified:boolean;
+        verified: boolean;
         createdAt: Date;
-        otp:number;
+        otp: number;
+        customSalt: string
         // vault: VaultEntry[]
         password: string;
     }
