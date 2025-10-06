@@ -140,15 +140,22 @@ export default function SignUpPage() {
           </motion.div>
 
           <motion.button
-            type="submit"
-            className="flex justify-center items-center w-full py-3 bg-white text-neutral-900 font-semibold text-lg rounded-lg shadow-sm hover:bg-neutral-200 active:scale-95 transition-all duration-300"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            disabled={loading}
-          >
-            {loading ? <Spinner size={"3"} /> : "Sign Up"}
-          </motion.button>
+  type="submit"
+  className="flex justify-center items-center gap-2 w-full py-3 bg-white text-neutral-900 font-semibold text-lg rounded-lg shadow-sm hover:bg-neutral-200 active:scale-95 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+  variants={buttonVariants}
+  whileHover="hover"
+  whileTap="tap"
+  disabled={loading}
+>
+  {loading ? (
+    <>
+      <Spinner size="3" />
+      <span className="animate-pulse">Signing Up...</span>
+    </>
+  ) : (
+    "Sign Up"
+  )}
+</motion.button>
         </motion.form>
 
         <motion.p className="mt-8 text-neutral-500 text-sm">

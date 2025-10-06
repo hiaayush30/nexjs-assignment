@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { useSession } from "next-auth/react"
+import { addToVault } from "@/actions/add-to-vault"
 
 export default function PasswordGenerator() {
   const { data } = useSession()
@@ -58,7 +59,6 @@ export default function PasswordGenerator() {
     if (!title || !password)
       return alert("Please fill at least a title and generate a password.")
 
-    // TODO: You can later send this to your Vault API (POST /api/vault)
     console.log({
       title,
       url,
@@ -66,11 +66,18 @@ export default function PasswordGenerator() {
       notes,
     })
 
-    alert("Entry saved locally (mock). Connect to your DB next!")
-    setTitle("")
-    setUrl("")
-    setNotes("")
-    setPassword("")
+    const res = await addToVault(data?.user.id as string, { title, url, password, notes })
+
+    if (res) {
+      alert("Password added to vault!")
+      setTitle("")
+      setUrl("")
+      setNotes("")
+      setPassword("")
+    }
+    else{
+      alert("Error in adding to vault!")
+    }
   }
 
   return (

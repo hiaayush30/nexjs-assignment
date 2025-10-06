@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '@radix-ui/themes'
 import { Card, CardContent } from './ui/card'
 import { cn } from '@/lib/utils'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 import { useRouter } from 'next/navigation'
 import { SendOtp } from '@/actions/send-otp'
@@ -45,8 +45,8 @@ export default function VerifyEmail() {
                 if (Number(otp) === user.otp) {
                     await verifyEmail(user.id)
                     setUser((prev) => prev ? { ...prev, verified: true } : prev);
-                    alert("Email verified successfully!")
-                    window.location.reload()
+                    alert("Email verified successfully!,Please login again")
+                    signOut()
                 }
                 else {
                     alert("OTP incorrect!")

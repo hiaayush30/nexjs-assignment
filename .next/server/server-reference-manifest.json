@@ -1,9 +1,20 @@
 {
   "node": {
+    "7f626182f07530d4aef2a2c45351cccff69bafd1bf": {
+      "workers": {
+        "app/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/actions/add-to-vault.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/actions/send-otp.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/actions/verify-email.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/dashboard/page": "action-browser"
+      }
+    },
     "60cd9173e297160a94535dda46a8e31042f42652d5": {
       "workers": {
         "app/dashboard/page": {
-          "moduleId": "[project]/.next-internal/server/app/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/actions/send-otp.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/actions/verify-email.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/actions/add-to-vault.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/actions/send-otp.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/actions/verify-email.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },
@@ -14,7 +25,7 @@
     "7fb3081b4efeb6e70cc34c3acd62f46f9bad0d6557": {
       "workers": {
         "app/dashboard/page": {
-          "moduleId": "[project]/.next-internal/server/app/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/actions/send-otp.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/actions/verify-email.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/actions/add-to-vault.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/actions/send-otp.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/actions/verify-email.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },

@@ -97,13 +97,21 @@ export default function LoginPage() {
           <motion.button
             disabled={loading}
             type="submit"
-            className="flex items-center justify-center w-full py-3 bg-white text-black font-semibold text-lg rounded-lg shadow-md transition-all duration-300 hover:bg-gray-200 disabled:opacity-70"
+            className="flex items-center justify-center gap-2 w-full py-3 bg-white text-black font-semibold text-lg rounded-lg shadow-md transition-all duration-300 hover:bg-gray-200 disabled:opacity-70 disabled:cursor-not-allowed"
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
           >
-            {loading ? <Spinner size={"3"} /> : "Log In"}
+            {loading ? (
+              <>
+                <Spinner size="3" />
+                <span className="animate-pulse">Logging In...</span>
+              </>
+            ) : (
+              "Log In"
+            )}
           </motion.button>
+
         </motion.form>
 
         <Separator className="my-6 border-gray-700" />
