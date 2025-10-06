@@ -44,6 +44,7 @@ export default function VerifyEmail() {
             try {
                 if (Number(otp) === user.otp) {
                     await verifyEmail(user.id)
+                    setUser((prev) => prev ? { ...prev, verified: true } : prev);
                     alert("Email verified successfully!")
                     window.location.reload()
                 }
