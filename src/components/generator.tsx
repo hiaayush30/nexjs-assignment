@@ -106,7 +106,7 @@ export default function PasswordGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground px-6 py-10 transition-colors duration-300">
+    <div className="min-h-screen bg-background text-foreground px-6 py-4 transition-colors duration-300">
       <div className="max-w-xl mx-auto space-y-6 rounded-2xl border border-border bg-card shadow-lg p-6">
         <h1 className="text-2xl font-bold text-center">🔐 Password & Vault Entry</h1>
         <p className="text-sm text-muted-foreground text-center">

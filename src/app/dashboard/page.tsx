@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Moon, Sun, KeyRound, Shield, MailCheck, LogOutIcon } from "lucide-react"
+import { Moon, Sun, KeyRound, Shield, MailCheck, LogOutIcon, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import PasswordGenerator from "@/components/generator"
@@ -13,17 +13,25 @@ import { signOut } from "next-auth/react"
 export default function DashboardPage() {
   const { setTheme, theme } = useTheme();
   const [activeTab, setActiveTab] = useState("generate")
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div
-      className={"min-h-screen max-h-screen flex transition-colors duration-300 bg-white text-foreground"}
-    >
+    <div className="min-h-screen flex flex-col md:flex-row transition-colors duration-300 bg-white dark:bg-black text-foreground">
+
+      {/* Sidebar overlay for mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/50 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside
-        className={cn(
-          "w-64 p-6 flex flex-col border-r transition-colors duration-300 dark:border-gray-800 dark:bg-black/95 border-gray-200 bg-gray-50",
-        )}
-      >
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-40 w-64 p-6 flex flex-col border-r bg-gray-50 dark:bg-black/95 dark:border-gray-800 border-gray-200 transform transition-transform duration-300 md:relative md:translate-x-0",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+
         <h1 className="text-2xl font-bold mb-8 flex items-center gap-2">
           🔐 <span>Password Manager</span>
         </h1>
@@ -73,25 +81,22 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main Content */}
-      <main
-        className={cn(
-          "flex-1 p-8 overflow-y-auto transition-colors duration-300",
-          "dark:bg-background", "bg-gray-50"
-        )}
-      >
+      <main className="flex-1 transition-colors duration-300 overflow-y-auto bg-gray-50 dark:bg-background min-h-screen">
+        {/* Mobile menu button */}
+        <div className="md:hidden mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-semibold">{activeTab === "generate" ? "Generate Password" : activeTab === "vault" ? "Vault" : "Verify Email"}</h2>
+          <Button variant="ghost" onClick={() => setSidebarOpen(true)}>
+            <Menu className="h-5 w-5" />
+          </Button>
+        </div>
+
         {activeTab === "generate" && (
-          <div className="max-w-2xl mx-auto">
             <PasswordGenerator />
-          </div>
         )}
 
-        {activeTab === "vault" && (
-          <Vault />
-        )}
+        {activeTab === "vault" && <Vault />}
 
-        {(activeTab === "verify") && (
-          <VerifyEmail />
-        )}
+        {activeTab === "verify" && <VerifyEmail />}
       </main>
     </div>
   )
